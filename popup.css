@@ -1,33 +1,63 @@
 body {
-    font-family: Arial, sans-serif;
-    width: 200px;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-  
-  .popup-container {
-    text-align: center;
-  }
-  
-  h1 {
-    font-size: 18px;
-  }
-  
-  select {
-    width: 100%;
-    padding: 5px;
-    margin: 10px 0;
-  }
-  
-  button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
+  font-family: Arial, sans-serif;
+  width: 300px;
+  height: 350px; /* Increased vertical size */
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #FFFAF3; /* Soft pastel cream */
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 20px;
+  color: #7D6E83; /* Soft pastel purple */
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 14px;
+  color: #A98993; /* Muted pastel pink */
+  margin-top: 10px;
+}
+
+img {
+  width: 100px; /* Adjust the size of the hedgehog image */
+  height: auto;
+  margin-bottom: 10px;
+}
+
+select {
+  width: 90%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #D8BFD8; /* Light pastel lavender */
+  background-color: #F8F0E5; /* Soft beige */
+  color: #7D6E83;
+  font-size: 14px;
+}
+
+button {
+  padding: 10px;
+  background-color: #FFC8DD; /* Soft pastel pink */
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: 90%;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: #FFAFCC; /* Lighter pastel pink */
+}

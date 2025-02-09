@@ -1,33 +1,27 @@
-document.getElementById("changeToneButton").addEventListener("click", function() {
-    const tone = document.getElementById("toneSelect").value;
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("apply-tone").addEventListener("click", function () {
+      let selectedTone = document.getElementById("tone-selector").value;
+      console.log("🎛️ Selected tone:", selectedTone);
   
-    // Send a message to content.js to change the tone
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      chrome.scripting.executeScript({
-        target: { tabId: tabs[0].id },
-        func: changeTone,
-        args: [tone]
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        if (!tabs || tabs.length === 0 || !tabs[0].id) {
+          console.error("🚨 No active tab found.");
+          return;
+        }
+  
+        console.log("📩 Sending message to content script...");
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          { action: "changeTone", tone: selectedTone },
+          function (response) {
+            if (chrome.runtime.lastError) {
+              console.error("🚨 Error sending message:", chrome.runtime.lastError.message);
+            } else {
+              console.log("✅ Message sent successfully:", response);
+            }
+          }
+        );
       });
     });
   });
   
-  function changeTone(tone) {
-    // Extract the page's text content
-    let pageContent = document.body.innerText;
-  
-    // Call the API to change the tone (example using OpenAI or any API)
-    fetch('YOUR_API_ENDPOINT', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_API_KEY'
-      },
-      body: JSON.stringify({ text: pageContent, tone: tone })
-    })
-    .then(response => response.json())
-    .then(data => {
-      // Replace the content with the modified tone
-      document.body.innerText = data.modifiedText;
-    })
-    .catch(error => console.error('Error:', error));
-  }
