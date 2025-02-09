@@ -1,11 +1,33 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 10px;
     width: 200px;
-}
-button {
-    margin-top: 10px;
-    padding: 5px 10px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .popup-container {
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 18px;
+  }
+  
+  select {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
     cursor: pointer;
-}
+    width: 100%;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
