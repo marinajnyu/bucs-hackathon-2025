@@ -1,12 +1,22 @@
 
 {
   "manifest_version": 3,
-  "name": "BobRossRocks",
+  "name": "Tone Changer",
   "version": "1.0.0",
+  "description": "Change the tone of any website!",
+  "permissions": ["activeTab"],
+  "host_permissions": ["<all_urls>", "http://*/*", "https://*/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/*"],
-      "js": ["Content.js"]
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
     }
   ]
 }

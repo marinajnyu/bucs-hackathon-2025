@@ -1,15 +1,11 @@
-let bobRossImages = [
-    "https://bit.ly/3Ck6DTU",
-    "https://bit.ly/3ozQCVk",
-    "https://bit.ly/3omYDN6",
-    "https://bit.ly/3osrfoi",
-    "https://bit.ly/3qCPjax",
-    "https://bit.ly/3CkRXE6",
-  ];
-  
-  const imgs = document.getElementsByTagName("img");
-  
-  for (image of imgs) {
-    const index = Math.floor(Math.random() * bobRossImages.length);
-    image.src = bobRossImages[index];
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action == "changeTone") {
+    let pageContent = document.body.innerText;
+    
+    //integrate API later
+    let newContent = pageContent.replace(/\bhello\b/g, "hey");
+    document.body.innerText = newContent;
+
+    sendResponse({ status: "success" });
   }
+});
