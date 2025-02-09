@@ -13,7 +13,7 @@ function replaceTextWithTone(node, tone) {
       node.textContent = indexedWords.join(" "); // Reconstruct text
   } else if (node.nodeType === Node.ELEMENT_NODE) {
       for (let child of node.childNodes) {
-          replaceTextWithTone(child, tone);
+          replaceTextWithTone(child, tone); //
       }
   }
 }
