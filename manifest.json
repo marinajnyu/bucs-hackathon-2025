@@ -8,7 +8,7 @@
   "host_permissions": ["<all_urls>", "http://*/*", "https://*/*"],
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "icon.png"
+    "default_icon": "happyHog.png"
   },
   "background": {
     "service_worker": "background.js"
