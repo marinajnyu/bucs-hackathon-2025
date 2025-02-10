@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   });
   
   async function processWithOpenAI(request, sender) {
-    const apiKey = "KEY_HERE"; 
+    const apiKey = "KEY"; 
     const openaiEndpoint = "https://api.openai.com/v1/chat/completions";
   
     try {

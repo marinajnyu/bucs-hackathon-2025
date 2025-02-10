@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Paw-lish",
+  "name": "Pup Talk",
   "version": "1.0.0",
   "description": "Change the tone of any website!",
   "permissions": ["activeTab", "storage", "scripting"],
