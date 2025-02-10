@@ -7,12 +7,21 @@
   </head>
   <body>
     <h1>Tone Changer</h1>
+    <img src="dog.png" alt="Happy Dog" />
     <select id="tone-selector">
-      <option value="formal">Formal</option>
-      <option value="casual">Casual</option>
-      <option value="sarcastic">Sarcastic</option>
+      <option value="explain to me like I'm 5">Simple</option>
+      <option value="poetic like Shakespeare">Shakespeare</option>
+      <option value="add emojis for emphasis">Emoji</option>
+      <option value="yell at me like you're angry">Angry</option>
+      <option value="be sarcastic and sassy with no 'oh'">Sarcastic</option>
+      <option value="passive aggressive like a mad mom">Passive Aggresive</option>
+      <option value="flirty with rizz">Flirty</option>
     </select>
     <button id="apply-tone">Apply</button>
+    <div id="loading" class="loading-spinner hidden">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
     <script src="popup.js"></script>
   </body>
 </html>

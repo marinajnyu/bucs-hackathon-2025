@@ -61,3 +61,41 @@ button {
 button:hover {
   background-color: #FFAFCC; /* Lighter pastel pink */
 }
+
+/* Loading Spinner Styles */
+.loading-spinner {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 250, 243, 0.9);
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner p {
+  margin: 0;
+  font-size: 12px;
+  color: #7D6E83;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #FFC8DD;
+  border-top: 3px solid #7D6E83;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
