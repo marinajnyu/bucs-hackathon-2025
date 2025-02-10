@@ -8,19 +8,39 @@ const TEXT_ELEMENTS = [
 
 // Function to check if an element contains meaningful text
 function hasVisibleText(element) {
-  // Skip elements with only whitespace or empty text
-  if (!element.textContent.trim()) return false;
+  const text = element.textContent.trim();
+  if (!text) return false;
   
-  // Skip elements that are hidden
   const style = window.getComputedStyle(element);
   if (style.display === 'none' || style.visibility === 'hidden') return false;
   
-  // Skip elements that only contain other text elements
-  const hasOnlyTextElements = Array.from(element.children).every(child => 
-    TEXT_ELEMENTS.includes(child.tagName.toLowerCase())
+  // Check if element has no child elements or only text nodes
+  const hasOnlyText = Array.from(element.childNodes).every(node => 
+    node.nodeType === Node.TEXT_NODE || 
+    (node.nodeType === Node.ELEMENT_NODE && !node.children.length)
   );
   
-  return !hasOnlyTextElements || element.childNodes.length === 1;
+  return hasOnlyText;
+}
+
+// Function to get text nodes from an element
+function getTextNodes(element) {
+  const textNodes = [];
+  const walk = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode: function(node) {
+        return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    }
+  );
+  
+  let node;
+  while (node = walk.nextNode()) {
+    textNodes.push(node);
+  }
+  return textNodes;
 }
 
 // Function to get all text elements that need processing
@@ -42,7 +62,6 @@ function getTextElements() {
 // Listen for messages from popup or background
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "changeTone" && request.tone) {
-    // Immediately acknowledge receipt of message
     sendResponse({ status: "processing" });
     
     const elements = getTextElements();
@@ -51,7 +70,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return false;
     }
 
-    // Process elements in batches to avoid overwhelming the API
     const batchSize = 5;
     const batches = [];
     
@@ -72,7 +90,7 @@ async function processBatches(batches, tone) {
   
   for (const batch of batches) {
     const promises = batch.map(element => 
-      processToneChange(element.textContent, tone, element)
+      processToneChange(element, tone)
     );
     
     try {
@@ -86,11 +104,9 @@ async function processBatches(batches, tone) {
       errorCount += batch.length;
     }
     
-    // Small delay between batches to avoid rate limiting
     await new Promise(resolve => setTimeout(resolve, 500));
   }
   
-  // Notify popup of completion
   chrome.runtime.sendMessage({
     action: "updateComplete",
     status: "complete",
@@ -103,39 +119,46 @@ async function processBatches(batches, tone) {
 }
 
 // Process individual element tone change
-async function processToneChange(originalText, tone, element) {
+async function processToneChange(element, tone) {
   try {
-    const response = await new Promise((resolve, reject) => {
-      chrome.runtime.sendMessage(
-        {
-          action: "fetchTone",
-          tone: tone,
-          text: originalText
-        },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            reject(chrome.runtime.lastError);
-          } else {
-            resolve(response);
-          }
-        }
-      );
-    });
+    const textNodes = getTextNodes(element);
+    
+    for (const textNode of textNodes) {
+      const originalText = textNode.textContent.trim();
+      if (!originalText) continue;
 
-    if (response && response.modifiedText) {
-      element.textContent = response.modifiedText;
-      console.log("Successfully updated element:", {
-        original: originalText.slice(0, 50) + "...",
-        modified: response.modifiedText.slice(0, 50) + "..."
+      const response = await new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage(
+          {
+            action: "fetchTone",
+            tone: tone,
+            text: originalText
+          },
+          (response) => {
+            if (chrome.runtime.lastError) {
+              reject(chrome.runtime.lastError);
+            } else {
+              resolve(response);
+            }
+          }
+        );
       });
-      return true;
-    } else {
-      throw new Error("No modified text received");
+
+      if (response && response.modifiedText) {
+        textNode.textContent = response.modifiedText;
+        console.log("Successfully updated text node:", {
+          original: originalText.slice(0, 50) + "...",
+          modified: response.modifiedText.slice(0, 50) + "..."
+        });
+      } else {
+        throw new Error("No modified text received");
+      }
     }
+    return true;
   } catch (error) {
     console.error("Error processing tone change:", error, {
       element: element,
-      originalText: originalText.slice(0, 50) + "..."
+      text: element.textContent.slice(0, 50) + "..."
     });
     throw error;
   }
@@ -147,7 +170,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const elements = getTextElements();
     if (elements.length > 0) {
       elements.forEach(element => {
-        element.textContent = message.modifiedText;
+        const textNodes = getTextNodes(element);
+        textNodes.forEach(node => {
+          node.textContent = message.modifiedText;
+        });
       });
       sendResponse({ status: "success" });
     } else {
@@ -155,4 +181,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
     return false;
   }
-});
+});g
